@@ -72,5 +72,9 @@
     .dropdown-btn {
     @apply hover:text-white w-[200px] h-[85px] text-left pl-[20px];
     }
+
+    .main-content-container {
+    @apply min-h-screen bg-[#0d1117];
+    }
     
 }

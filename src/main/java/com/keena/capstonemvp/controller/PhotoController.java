@@ -1,5 +1,6 @@
 package com.keena.capstonemvp.controller;
 
+import com.keena.capstonemvp.entity.Photo;
 import com.keena.capstonemvp.entity.Tag;
 import com.keena.capstonemvp.service.PhotoService;
 import lombok.extern.slf4j.Slf4j;
