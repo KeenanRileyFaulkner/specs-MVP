@@ -1,13 +1,76 @@
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+@layer components {
+    .contentContainer {
+        @apply min-h-screen overflow-auto;
+    }
+    
+    .background {
+    @apply bg-center bg-no-repeat bg-cover fixed h-screen w-screen -z-10;
+    }
+
+    .header-container {
+    @apply w-screen h-[100px] border-b-[1px] border-[#808691] fixed flex flex-row items-center bg-[#0d1117];
+    }
+
+    .icon {
+    @apply text-[24pt] text-[#c1c9d9] hover:text-white hover:cursor-pointer mx-4;
+    }
+
+    .profile-icon {
+    @apply h-[50px] w-[50px] bg-cover rounded-3xl ml-4 md:mr-8 border-[2px] 
+    border-[#c1c9d9] hover:border-white hover:cursor-pointer;
+    }
+
+    .nav-icon {
+    @apply font-semibold text-[#c1c9d9] text-[24pt] pl-8 hover:text-white hover:cursor-pointer;
+    }
+
+    .tooltip {
+    @apply absolute w-auto p-2 min-w-max
+            rounded-md shadow-md 
+            text-white bg-black
+            text-xs font-bold transition-all duration-100 scale-0 origin-top;
+    }
+
+    .nav-name-tooltip {
+    @apply tooltip m-3 md:left-20 ml-5;
+    }
+
+    .nav-icon-tooltip {
+    @apply tooltip mt-5 mr-0 -ml-2 icon;
+    }
+
+    .nav-menu-close-tooltip {
+    @apply tooltip mt-5 -ml-8 icon;
+    }
+
+    .menu-dropdown-container {
+    @apply h-[350px] w-[230px] md:w-0 absolute mt-[34px] -ml-[125px] 
+            flex flex-row flex-wrap items-center
+            border-[1px] border-[#808691] border-b-white border-l-white border-t-0 bg-[#0d1117] text-[#c1c9d9] -z-10;
+    }
+
+    .dropdown-hr {
+    @apply text-[#6d727b] w-[230px];
+    }
+
+    .nav-menu-open-tooltip {
+    @apply tooltip mt-5 -ml-3 icon;
+    }
+
+    .right-side-nav-icons {
+    @apply md:scale-100 scale-0 w-0 md:w-auto;
+    }
+
+    .menu-toggle-btn {
+    @apply md:scale-0 scale-100 md:mr-0 mr-10 md:w-0 w-auto;
+    }
+
+    .dropdown-btn {
+    @apply hover:text-white w-[200px] h-[85px] text-left pl-[20px];
+    }
+    
 }
