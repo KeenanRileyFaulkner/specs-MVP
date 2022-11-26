@@ -1,19 +1,21 @@
-import {RiStackFill as SkillsIcon, RiContactsBook2Fill as ContactIcon, RiMenuFill as HamburgerMenuIcon} from 'react-icons/ri'
+import {RiContactsBook2Fill as ContactIcon, RiMenuFill as HamburgerMenuIcon} from 'react-icons/ri'
 import {BsGrid as ProjectIcon} from 'react-icons/bs'
 import { IoClose as CloseIcon } from 'react-icons/io5'
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import { IoMdPhotos as PhotoIcon } from 'react-icons/io'
+import { FaUserCircle as UserIcon } from 'react-icons/fa'
 
 const Header = () => {
     return (
         <div className="header-container">
-            <Link to='/about'>
-                <NameTooltip  name={<h1>Keenan Faulkner</h1>} text={'About Page'} />
+            <Link to='/home'>
+                <NameTooltip  name={<h1>Photo Mosaic Generator</h1>} text={'Home Page'} />
             </Link>
 
-            <div className='flex flex-row items-center ml-auto right-side-nav-icons'>
+            <div className='flex flex-row items-center ml-auto right-side-nav-icons mr-[40px]'>
                 <Link to='/skills'>
-                    <IconTooltip icon={<SkillsIcon/>} text="Skills" />
+                    <IconTooltip icon={<PhotoIcon/>} text="Photos" />
                 </Link>
                 <Link to='/projects'>
                     <IconTooltip icon={<ProjectIcon/>} text="Projects" />
@@ -23,12 +25,8 @@ const Header = () => {
                 </Link>
                 
                 <IconTooltip 
-                    icon={ 
-                        <a href='https://github.com/KeenanRileyFaulkner' target='_blank' rel='noreferrer'>
-                            <div className='profile-icon'/>
-                        </a>
-                    }
-                    text="Github Profile"
+                    icon={ <UserIcon />}
+                    text="Account"
                 />
             </div>
             <HamburgerMenu />

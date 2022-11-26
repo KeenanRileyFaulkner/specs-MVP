@@ -40,7 +40,7 @@
     }
 
     .nav-icon-tooltip {
-    @apply tooltip mt-5 mr-0 -ml-2 icon;
+    @apply tooltip mt-5 -ml-8;
     }
 
     .nav-menu-close-tooltip {
