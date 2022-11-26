@@ -14,7 +14,7 @@ const Header = () => {
             </Link>
 
             <div className='flex flex-row items-center ml-auto right-side-nav-icons mr-[40px]'>
-                <Link to='/skills'>
+                <Link to='/photos'>
                     <IconTooltip icon={<PhotoIcon/>} text="Photos" />
                 </Link>
                 <Link to='/projects'>
@@ -23,11 +23,9 @@ const Header = () => {
                 <Link to='/contact'>
                     <IconTooltip icon={<ContactIcon/>} text="Contact" />
                 </Link>
-                
-                <IconTooltip 
-                    icon={ <UserIcon />}
-                    text="Account"
-                />
+                <Link to='/account'>
+                    <IconTooltip icon={ <UserIcon />} text="Account" />
+                </Link>
             </div>
             <HamburgerMenu />
         </div>
@@ -108,7 +106,7 @@ const MenuDropdown = ({ expanded, toggleExpanded }) => {
 
     let navigate = useNavigate();
     const navToSkills = () => {
-        navigate('/skills');
+        navigate('/photos');
         toggleExpanded();
     }
 
@@ -122,24 +120,20 @@ const MenuDropdown = ({ expanded, toggleExpanded }) => {
         toggleExpanded();
     }
 
-    const openInNewTab = url => {
-        window.open(url, '_blank', 'noopener, noreferrer');
-    }
-
     const navToGithub = () => {
-        openInNewTab('https://github.com/KeenanRileyFaulkner');
+        navigate('/account');
         toggleExpanded();
     }
 
     return (
         <div className={`menu-dropdown-container ${scale} transition-all duration-200 origin-top-right`}>
-            <button className='dropdown-btn' onClick={navToSkills}>Skills -- 🔨</button>
+            <button className='dropdown-btn' onClick={navToSkills}>Photos -- 📷</button>
             <hr className='dropdown-hr'/>
             <button className='dropdown-btn' onClick={navToProjects}>Projects -- 👷</button>
             <hr className='dropdown-hr'/>
             <button className='dropdown-btn' onClick={navToContact}>Contact -- 📨</button>
             <hr className='dropdown-hr'/>
-            <button className='dropdown-btn' onClick={navToGithub}>Github Profile -- 🖥️</button>
+            <button className='dropdown-btn' onClick={navToGithub}>Account -- 👤</button>
         </div>
     )
 }
