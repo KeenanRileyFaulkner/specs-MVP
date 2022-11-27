@@ -17,6 +17,7 @@ import java.util.Collection;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "usr_id")
     private Long id;
 
     @Column(name="usr_name")
@@ -26,7 +27,7 @@ public class User {
     private String password;
 
     @Column(name = "user_photos")
-    @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "owner", cascade = CascadeType.PERSIST)
     private Collection<Photo> photos;
 
     public Collection<Photo> getPhotos() {
@@ -41,5 +42,15 @@ public class User {
         photo.setOwner(this);
     }
 
+    @Column(name = "projects")
+    @OneToMany(mappedBy = "projectOwner", cascade = CascadeType.PERSIST)
+    private Collection<Project> projects;
+
+    public Collection<Project> getProjects() {
+        if(this.projects == null) {
+            this.projects = new ArrayList<>();
+        }
+        return this.projects;
+    }
 
 }
