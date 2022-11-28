@@ -43,6 +43,7 @@ const LoginForm = ({setShowSignIn, setLoggedIn, setUserId}) => {
     return (
         <div>
             <form className="user-auth-form">
+                <h2 className="user-auth-header">Sign In</h2>
                 <label for="username">Username:</label>
                 <input type="text" required id="username" />
                 <label for="password">Password:</label>
@@ -82,6 +83,7 @@ const SignUpForm = ({setShowSignIn}) => {
     return (
         <div>
             <form className="user-auth-form">
+                <h2 className="user-auth-header">Register</h2>
                 <label for="username">Username:</label>
                 <input type="text" required id="username" />
                 <label for="password">Password:</label>
