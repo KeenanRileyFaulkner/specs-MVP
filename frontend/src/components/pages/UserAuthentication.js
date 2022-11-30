@@ -69,6 +69,7 @@ const SignUpForm = ({setShowSignIn}) => {
         axios.post("/api/auth/signup", reqBody)
             .then(res => {
                 alert(res.data);
+                navToLoginPage();
             })
             .catch(err => {
                 alert(err.response.data);

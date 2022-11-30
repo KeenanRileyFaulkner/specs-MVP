@@ -1,10 +1,9 @@
 import axios from "axios"
 import { useState, useEffect } from 'react'
 
-const Photos = () => {
+const Photos = ({userId}) => {
     const [currPhoto, setCurrPhoto] = useState("");
     const [currIndex, setCurrIndex] = useState(0);
-    const [userId, setUserId] = useState(0);
 
     useEffect(() => {
         axios.get(`/api/user/${userId}/photos`)

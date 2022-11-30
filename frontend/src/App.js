@@ -10,7 +10,7 @@ function App() {
 
   let toDisplay;
   if(loggedIn) {
-    toDisplay = "";
+    toDisplay = <Photos userId={userId} />;
   } else {
     toDisplay = <UserAuthentication setLoggedIn={setLoggedIn} setUserId={setUserId}/>;
   }
