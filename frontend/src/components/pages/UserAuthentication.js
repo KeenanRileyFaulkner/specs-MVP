@@ -44,9 +44,9 @@ const LoginForm = ({setShowSignIn, setLoggedIn, setUserId}) => {
         <div>
             <form className="user-auth-form">
                 <h2 className="user-auth-header">Sign In</h2>
-                <label for="username">Username:</label>
+                <label htmlFor="username">Username:</label>
                 <input type="text" required id="username" />
-                <label for="password">Password:</label>
+                <label htmlFor="password">Password:</label>
                 <input type="password" required id="password" />
                 <button onClick={logIn}>Log In</button>
             </form>
@@ -85,9 +85,9 @@ const SignUpForm = ({setShowSignIn}) => {
         <div>
             <form className="user-auth-form">
                 <h2 className="user-auth-header">Register</h2>
-                <label for="username">Username:</label>
+                <label htmlFor="username">Username:</label>
                 <input type="text" required id="username" />
-                <label for="password">Password:</label>
+                <label htmlFor="password">Password:</label>
                 <input type="password" required id="password" />
                 <button onClick={register}>Register</button>
             </form>
