@@ -41,17 +41,19 @@ const Photos = ({userId}) => {
     }, []);
 
     useEffect(() => {
+        const tempImageUrls = []
         allPhotoIds.forEach(id => {
             axios.get(`/api/photos/${id}`, {
                 responseType: 'blob',
             })
                 .then(res => {
                     const imgUrl = URL.createObjectURL(res.data);
-                    const newSourcesArray = [...allPhotoSources, imgUrl]
-                    setAllPhotoSources(newSourcesArray);
+                    tempImageUrls.push(imgUrl);
                 })
                 .catch(err => console.log(err));
         });
+        setAllPhotoSources(tempImageUrls);
+        setCurrPhoto(tempImageUrls[0]);
     }, [allPhotoIds]);
 
     useEffect(() => {
