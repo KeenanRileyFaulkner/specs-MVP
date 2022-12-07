@@ -1,4 +1,3 @@
-import { hasSelectionSupport } from "@testing-library/user-event/dist/utils";
 import axios from "axios"
 import { useState, useEffect, useRef } from 'react'
 import { AiOutlinePlus as PlusIcon } from 'react-icons/ai'
@@ -29,6 +28,8 @@ const Photos = ({userId}) => {
     const [imageIds, setImageIds] = useState([]);
     const [imageSources, setImageSources] = useState([]);
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
+    const [imageTagArrays, setImageTagArrays] = useState([]);
+    const [tagWindowHidden, toggleHidden] = useState(true);
 
     useEffect(() => {
         setCurrentImageIndex(0);
@@ -53,22 +54,64 @@ const Photos = ({userId}) => {
                     })).catch(errors => {
                         errors.forEach(err => console.log(err));
                     });
+
+                const tempArrForTagEndpoints = []
+                tempArrForImageIds.forEach(id => {
+                    tempArrForTagEndpoints.push(`/api/photos/${id}/tags`);
+                });
+
+                axios.all(tempArrForTagEndpoints.map((endpoint) => axios.get(endpoint)))
+                    .then(axios.spread((...responses) => {
+                        //update state to hold the tags for each image associated with the userId
+                        const tempImageTagArrays = []
+                        responses.forEach(response => {
+                            const tagArray = response.data;
+                            tempImageTagArrays.push(tagArray);
+                        });
+                        setImageTagArrays(tempImageTagArrays);
+                    }))
+                    .catch(errors => errors.forEach(err => console.log(err)));
             })
             .catch(err => console.log(err));        
-    }, []);
+    }, [userId]);
 
-    return (
-        <div className="main-content-container flex flex-col justify-center items-center">
-            <div className="flex">
+    let display;
+    if(tagWindowHidden) {
+        display = 
+            <>
                 <button onClick={decrIndex}>
                     <LeftArrowCircle className="arrow-circle"/>
                 </button>
                 
-                <PhotoContainer currPhoto={imageSources[currentImageIndex]} />
+                <PhotoContainer 
+                    currPhoto={imageSources[currentImageIndex]} 
+                    currPhotoId={imageIds[currentImageIndex]} 
+                    imageEndpoints={imageEndpoints}
+                    setImageEndpoints={setImageEndpoints}
+                    imageIds={imageIds}
+                    setImageIds={setImageIds}
+                    imageSources={imageSources}
+                    setImageSources={setImageSources}
+                    currentImageIndex={currentImageIndex}
+                    setCurrentImageIndex={setCurrentImageIndex}
+                    toggleHidden={toggleHidden}
+                />
 
                 <button onClick={incrIndex}>
                     <RightArrowCircle className="arrow-circle"/>
                 </button>
+            </>
+    } else {
+        display = 
+            <>
+                
+            </>
+    }
+
+    return (
+        <div className="main-content-container flex flex-col justify-center items-center">
+            <div className="flex">
+                {display}
             </div>
             
             <AddPhotoButton 
@@ -85,16 +128,68 @@ const Photos = ({userId}) => {
     )
 }
 
-const PhotoContainer = ({ currPhoto }) => {
+const PhotoContainer = ({ currPhoto, currPhotoId, currentImageIndex, imageEndpoints, setImageEndpoints, imageSources, setImageSources,
+    setCurrentImageIndex, imageIds, setImageIds, toggleHidden }) => {
+
+    const handleDelete = (e) => {
+        e.preventDefault();
+        axios.delete(`/api/photos/${currPhotoId}`)
+            .then(() => {
+                //remove the image id from state
+                let tempArrForImageIds = [...imageIds];
+                tempArrForImageIds.splice(currentImageIndex, 1);
+                setImageIds(tempArrForImageIds);
+
+                //remove the image source from state
+                let tempArrForImageSources = [...imageSources];
+                tempArrForImageSources.splice(currentImageIndex, 1);
+                setImageSources(tempArrForImageSources);
+
+                //remove the image endpoint from state
+                let tempArrForImageEndpoints = [...imageEndpoints];
+                tempArrForImageEndpoints.splice(currentImageIndex, 1);
+                setImageEndpoints(tempArrForImageEndpoints);
+
+                //set the current image index to 0
+                setCurrentImageIndex(0);
+            })
+            .catch(err => console.log(err));
+    }
+
+    const displayTags = e => {
+        e.preventDefault();
+        toggleHidden(false);
+    }
+
+    let conditionalPhotoDisplay;
+    let disableHoverButtons;
+    if(imageSources.length > 0) {
+        disableHoverButtons = false;
+        conditionalPhotoDisplay = 
+            <img 
+                src={currPhoto} 
+                className="photo-display group-hover:opacity-30 h-[100%] w-[100%]" alt="" id="photoOnDisplay" 
+            />            
+    } else {
+        disableHoverButtons = true;
+        conditionalPhotoDisplay = 
+            <div className="h-[100%] w-[100%] border-white border-2 flex items-center justify-center">
+                <h2 className="text-[18pt] max-w-[250px]">Upload photos to get started!</h2>
+            </div>
+    }
+    
     return (
-        <div className="group max-h-[350px] max-w-[350px] min-w-[300px] min-h-[300px] relative hover:bg-gray-400">
-            <img src={currPhoto} className="photo-display group-hover:opacity-30 h-[100%] w-[100%]" alt="" id="photoOnDisplay" />
+        <div className={`group max-h-[350px] max-w-[350px] min-w-[300px] min-h-[300px] relative ${disableHoverButtons ? '' : 'hover:bg-gray-400'}`}>
+            {conditionalPhotoDisplay}
             
-            <button className="photo-container-button group-hover:opacity-100">
+            <button className={`photo-container-button group-hover:opacity-100 ${disableHoverButtons ? 'hidden' : 'visible'}`}>
                 View Tags
             </button>
             
-            <button className="photo-container-button group-hover:opacity-100">
+            <button 
+                className={`photo-container-button group-hover:opacity-100 ${disableHoverButtons ? 'hidden' : 'visible'} `} 
+                onClick={handleDelete}
+            >
                 Delete Image
             </button>
         </div>
