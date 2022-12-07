@@ -5,61 +5,56 @@ import { AiOutlinePlus as PlusIcon } from 'react-icons/ai'
 import { BsFillArrowLeftCircleFill as LeftArrowCircle, BsFillArrowRightCircleFill as RightArrowCircle } from 'react-icons/bs';
 
 const Photos = ({userId}) => {
-    const [currPhoto, setCurrPhoto] = useState("");
-    const [currIndex, setCurrIndex] = useState(0);
-    const [allPhotoIds, setAllPhotoIds] = useState([]);
-    const [allPhotoSources, setAllPhotoSources] = useState([]);
-
     const incrIndex = e => {
         e.preventDefault();
-        if(currIndex < allPhotoSources.length - 1) {
-            setCurrIndex(currIndex + 1);
+        if(currentImageIndex < imageSources.length - 1) {
+            setCurrentImageIndex(currentImageIndex + 1);
         } else {
-            setCurrIndex(0);
+            setCurrentImageIndex(0);
         }
-        setCurrPhoto(allPhotoSources[currIndex]);
     }
 
     const decrIndex = e => {
         e.preventDefault();
-        if(currIndex > 0) {
-            setCurrIndex(currIndex - 1);
-        } else if (allPhotoSources.length > 0) {
-            setCurrIndex(allPhotoSources.length - 1);
+        if(currentImageIndex > 0) {
+            setCurrentImageIndex(currentImageIndex - 1);
+        } else if (imageSources.length > 0) {
+            setCurrentImageIndex(imageSources.length - 1);
         } else {
-            setCurrIndex(0);
+            setCurrentImageIndex(0);
         }
-        setCurrPhoto(allPhotoSources[currIndex]);
     }
 
+    const [imageEndpoints, setImageEndpoints] = useState([]);
+    const [imageIds, setImageIds] = useState([]);
+    const [imageSources, setImageSources] = useState([]);
+    const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
     useEffect(() => {
+        setCurrentImageIndex(0);
         axios.get(`/api/user/${userId}/photos`)
             .then(res => {
-                setAllPhotoIds(res.data);
+                setImageIds(res.data);
+                const tempArrForImageIds = res.data;
+                const tempArrForEndpoints = [];
+                tempArrForImageIds.forEach(id => {
+                    tempArrForEndpoints.push(`/api/photos/${id}`);
+                });
+                
+                axios.all(tempArrForEndpoints.map((endpoint) => axios.get(endpoint, { responseType: 'blob' })))
+                    .then(axios.spread((...responses) => {
+                        const tempArrayForUris = [];
+                        responses.forEach(response => {
+                            const imgUrl = URL.createObjectURL(response.data);
+                            tempArrayForUris.push(imgUrl);
+                        });
+                        setImageSources(tempArrayForUris);
+                    })).catch(errors => {
+                        errors.forEach(err => console.log(err));
+                    });
             })
-            .catch(err => console.log(err));
+            .catch(err => console.log(err));        
     }, []);
-
-    useEffect(() => {
-        const tempImageUrls = []
-        allPhotoIds.forEach(id => {
-            axios.get(`/api/photos/${id}`, {
-                responseType: 'blob',
-            })
-                .then(res => {
-                    const imgUrl = URL.createObjectURL(res.data);
-                    tempImageUrls.push(imgUrl);
-                })
-                .catch(err => console.log(err));
-        });
-        setAllPhotoSources(tempImageUrls);
-        setCurrPhoto(allPhotoSources[0]);
-    }, [allPhotoIds]);
-
-    // useEffect(() => {
-    //     console.log(allPhotoSources);
-    //     setCurrPhoto(allPhotoSources[currIndex]);
-    // }, [allPhotoSources]);
 
     return (
         <div className="main-content-container flex flex-col justify-center items-center">
@@ -68,14 +63,22 @@ const Photos = ({userId}) => {
                     <LeftArrowCircle className="arrow-circle"/>
                 </button>
                 
-                <PhotoContainer currPhoto={currPhoto} />
+                <PhotoContainer currPhoto={imageSources[currentImageIndex]} />
 
                 <button onClick={incrIndex}>
                     <RightArrowCircle className="arrow-circle"/>
                 </button>
             </div>
             
-            <AddPhotoButton userId={userId} setAllPhotoIds={setAllPhotoIds} allPhotoIds={allPhotoIds} />
+            <AddPhotoButton 
+                userId={userId} 
+                setAllPhotoIds={setImageIds} 
+                allPhotoIds={imageIds} 
+                setImageEndpoints={setImageEndpoints}
+                imageEndpoints={imageEndpoints}
+                setImageSources={setImageSources}
+                imageSources={imageSources}
+            />
         </div>
     )
 }
@@ -96,7 +99,7 @@ const PhotoContainer = ({ currPhoto }) => {
     )
 }
 
-const AddPhotoButton = ({ userId, setAllPhotoIds, allPhotoIds }) => {
+const AddPhotoButton = ({ userId, setAllPhotoIds, allPhotoIds, setImageEndpoints, imageEndpoints, setImageSources, imageSources }) => {
     const inputRef = useRef(null);
 
 
@@ -122,7 +125,14 @@ const AddPhotoButton = ({ userId, setAllPhotoIds, allPhotoIds }) => {
         }).then(res => {
                 const arr = [...allPhotoIds, res.data];
                 setAllPhotoIds(arr);
-                console.log("all photo ids", allPhotoIds);
+                const newEndpoint = `/api/photos/${res.data}`;
+                setImageEndpoints([...imageEndpoints, newEndpoint]);
+                axios.get(newEndpoint, { responseType: 'blob' })
+                    .then(image => {
+                        const imgUrl = URL.createObjectURL(image.data);
+                        setImageSources([...imageSources, imgUrl]);
+                    })
+                    .catch(err => console.log(err));
             })
             .catch(err => console.log(err));
 
