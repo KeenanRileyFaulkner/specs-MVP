@@ -110,6 +110,29 @@
     }
 
     .photo-display {
-    @apply w-[250px] h-[250px] mx-auto my-5 object-cover
+    @apply w-[350px] h-[350px] mx-auto object-cover;
     }
+
+    .photo-display:hover {
+    @apply opacity-30 bg-gray-400 h-[100%] w-[100%];
+    }
+
+    .photo-container-button {
+    @apply absolute top-[27%] left-[50%] translate-x-[-50%] text-white h-[10%] opacity-0
+           w-[250px] rounded-md border-white border-[1px];
+    }
+
+    .photo-container-button:last-child {
+    @apply top-[65%];
+    }
+
+    .photo-container-button:hover {
+    @apply bg-gray-500 opacity-20;
+    }
+
+    .photo-container-button:last-child:hover {
+    @apply bg-red-500 opacity-80;
+    }
+
+    
 }

@@ -1,6 +1,6 @@
 import {RiContactsBook2Fill as ContactIcon, RiMenuFill as HamburgerMenuIcon} from 'react-icons/ri'
 import {BsGrid as ProjectIcon} from 'react-icons/bs'
-import { IoClose as CloseIcon } from 'react-icons/io5'
+import { IoClose as CloseIcon, IoCreate as CreateIcon } from 'react-icons/io5'
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { IoMdPhotos as PhotoIcon } from 'react-icons/io'
@@ -17,11 +17,11 @@ const Header = () => {
                 <Link to='/photos'>
                     <IconTooltip icon={<PhotoIcon/>} text="Photos" />
                 </Link>
-                <Link to='/projects'>
-                    <IconTooltip icon={<ProjectIcon/>} text="Projects" />
+                <Link to='/projects-view'>
+                    <IconTooltip icon={<ProjectIcon/>} text="View Projects" />
                 </Link>
-                <Link to='/contact'>
-                    <IconTooltip icon={<ContactIcon/>} text="Contact" />
+                <Link to='/project-creation'>
+                    <IconTooltip icon={<CreateIcon/>} text="New Project" />
                 </Link>
                 <Link to='/account'>
                     <IconTooltip icon={ <UserIcon />} text="Account" />
@@ -129,9 +129,9 @@ const MenuDropdown = ({ expanded, toggleExpanded }) => {
         <div className={`menu-dropdown-container ${scale} transition-all duration-200 origin-top-right`}>
             <button className='dropdown-btn' onClick={navToSkills}>Photos -- 📷</button>
             <hr className='dropdown-hr'/>
-            <button className='dropdown-btn' onClick={navToProjects}>Projects -- 👷</button>
+            <button className='dropdown-btn' onClick={navToProjects}>View Projects -- 👷</button>
             <hr className='dropdown-hr'/>
-            <button className='dropdown-btn' onClick={navToContact}>Contact -- 📨</button>
+            <button className='dropdown-btn' onClick={navToContact}>New Project -- ✏️</button>
             <hr className='dropdown-hr'/>
             <button className='dropdown-btn' onClick={navToGithub}>Account -- 👤</button>
         </div>

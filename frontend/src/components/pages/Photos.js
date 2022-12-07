@@ -1,3 +1,4 @@
+import { hasSelectionSupport } from "@testing-library/user-event/dist/utils";
 import axios from "axios"
 import { useState, useEffect, useRef } from 'react'
 import { AiOutlinePlus as PlusIcon } from 'react-icons/ai'
@@ -11,7 +12,6 @@ const Photos = ({userId}) => {
 
     const incrIndex = e => {
         e.preventDefault();
-        console.log(allPhotoSources)
         if(currIndex < allPhotoSources.length - 1) {
             setCurrIndex(currIndex + 1);
         } else {
@@ -53,12 +53,13 @@ const Photos = ({userId}) => {
                 .catch(err => console.log(err));
         });
         setAllPhotoSources(tempImageUrls);
-        setCurrPhoto(tempImageUrls[0]);
+        setCurrPhoto(allPhotoSources[0]);
     }, [allPhotoIds]);
 
-    useEffect(() => {
-        setCurrPhoto(allPhotoSources[currIndex]);
-    }, [allPhotoSources]);
+    // useEffect(() => {
+    //     console.log(allPhotoSources);
+    //     setCurrPhoto(allPhotoSources[currIndex]);
+    // }, [allPhotoSources]);
 
     return (
         <div className="main-content-container flex flex-col justify-center items-center">
@@ -81,8 +82,16 @@ const Photos = ({userId}) => {
 
 const PhotoContainer = ({ currPhoto }) => {
     return (
-        <div className="border-white border-2 rounded-lg h-[400px] w-[300px]">
-            <img src={currPhoto} className="photo-display" alt="" />
+        <div className="group max-h-[350px] max-w-[350px] min-w-[300px] min-h-[300px] relative">
+            <img src={currPhoto} className="photo-display group group-hover:opacity-30 bg-gray-400 h-[100%] w-[100%]" alt="" id="photoOnDisplay" />
+            
+            <button className="photo-container-button group-hover:opacity-100">
+                View Tags
+            </button>
+            
+            <button className="photo-container-button group-hover:opacity-100">
+                Delete Image
+            </button>
         </div>
     )
 }
