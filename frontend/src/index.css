@@ -118,16 +118,16 @@
     }
 
     .photo-container-button {
-    @apply absolute top-[27%] left-[50%] translate-x-[-50%] text-white h-[10%] opacity-0
+    @apply absolute top-[30%] left-[50%] translate-x-[-50%] text-white h-[10%] opacity-0
            w-[250px] rounded-md border-white border-[1px];
     }
 
     .photo-container-button:last-child {
-    @apply top-[65%];
+    @apply top-[60%];
     }
 
     .photo-container-button:hover {
-    @apply bg-gray-500 opacity-20;
+    @apply bg-blue-400 opacity-20;
     }
 
     .photo-container-button:last-child:hover {

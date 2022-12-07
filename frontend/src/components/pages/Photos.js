@@ -40,6 +40,7 @@ const Photos = ({userId}) => {
                 tempArrForImageIds.forEach(id => {
                     tempArrForEndpoints.push(`/api/photos/${id}`);
                 });
+                setImageEndpoints(tempArrForEndpoints);
                 
                 axios.all(tempArrForEndpoints.map((endpoint) => axios.get(endpoint, { responseType: 'blob' })))
                     .then(axios.spread((...responses) => {
@@ -78,6 +79,7 @@ const Photos = ({userId}) => {
                 imageEndpoints={imageEndpoints}
                 setImageSources={setImageSources}
                 imageSources={imageSources}
+                setCurrentImageIndex={setCurrentImageIndex}
             />
         </div>
     )
@@ -85,8 +87,8 @@ const Photos = ({userId}) => {
 
 const PhotoContainer = ({ currPhoto }) => {
     return (
-        <div className="group max-h-[350px] max-w-[350px] min-w-[300px] min-h-[300px] relative">
-            <img src={currPhoto} className="photo-display group group-hover:opacity-30 bg-gray-400 h-[100%] w-[100%]" alt="" id="photoOnDisplay" />
+        <div className="group max-h-[350px] max-w-[350px] min-w-[300px] min-h-[300px] relative hover:bg-gray-400">
+            <img src={currPhoto} className="photo-display group-hover:opacity-30 h-[100%] w-[100%]" alt="" id="photoOnDisplay" />
             
             <button className="photo-container-button group-hover:opacity-100">
                 View Tags
@@ -99,7 +101,8 @@ const PhotoContainer = ({ currPhoto }) => {
     )
 }
 
-const AddPhotoButton = ({ userId, setAllPhotoIds, allPhotoIds, setImageEndpoints, imageEndpoints, setImageSources, imageSources }) => {
+const AddPhotoButton = ({ userId, setAllPhotoIds, allPhotoIds, setImageEndpoints, 
+    imageEndpoints, setImageSources, imageSources, setCurrentImageIndex }) => {
     const inputRef = useRef(null);
 
 
@@ -131,6 +134,7 @@ const AddPhotoButton = ({ userId, setAllPhotoIds, allPhotoIds, setImageEndpoints
                     .then(image => {
                         const imgUrl = URL.createObjectURL(image.data);
                         setImageSources([...imageSources, imgUrl]);
+                        setCurrentImageIndex(arr.length - 1);
                     })
                     .catch(err => console.log(err));
             })
