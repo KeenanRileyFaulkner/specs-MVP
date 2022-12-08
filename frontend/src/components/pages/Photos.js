@@ -28,7 +28,6 @@ const Photos = ({userId}) => {
     const [imageIds, setImageIds] = useState([]);
     const [imageSources, setImageSources] = useState([]);
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
-    const [imageTagArrays, setImageTagArrays] = useState([]);
     const [tagWindowHidden, toggleHidden] = useState(true);
 
     useEffect(() => {
@@ -54,23 +53,6 @@ const Photos = ({userId}) => {
                     })).catch(errors => {
                         errors.forEach(err => console.log(err));
                     });
-
-                const tempArrForTagEndpoints = []
-                tempArrForImageIds.forEach(id => {
-                    tempArrForTagEndpoints.push(`/api/photos/${id}/tags`);
-                });
-
-                axios.all(tempArrForTagEndpoints.map((endpoint) => axios.get(endpoint)))
-                    .then(axios.spread((...responses) => {
-                        //update state to hold the tags for each image associated with the userId
-                        const tempImageTagArrays = []
-                        responses.forEach(response => {
-                            const tagArray = response.data;
-                            tempImageTagArrays.push(tagArray);
-                        });
-                        setImageTagArrays(tempImageTagArrays);
-                    }))
-                    .catch(errors => errors.forEach(err => console.log(err)));
             })
             .catch(err => console.log(err));        
     }, [userId]);
@@ -131,20 +113,71 @@ const Photos = ({userId}) => {
     )
 }
 
-const TagWindow = ({ setTagWindowHidden }) => {
+const TagWindow = ({ setTagWindowHidden, currentImageId }) => {
     const closeWindow = e => {
         e.preventDefault();
         setTagWindowHidden(true);
     }
+
+    const [imageTags, setImageTags] = useState([]);
+
+    useEffect(() => {
+        axios.get(`/api/photos/${currentImageId}/tags`)
+            .then(res => {
+                setImageTags(res.data);
+            })
+            .catch(err => console.log(err));
+    }, [currentImageId]);
+
+    const handleTagAdd = e => {
+        e.preventDefault();
+        let input = document.getElementById('new-tag-name');
+
+        if(/\s/.test(input.value)) {
+            alert("Tags cannot include any whitespace");
+            return;
+        }
+
+        axios.post(`/api/tag/${input.value}/photo/${currentImageId}`)
+            .then(() => {
+                const tempArr = [...imageTags, input.value];
+                setImageTags(tempArr);
+                input.value="";
+            })
+            .catch(err => console.log(err));
+    }
+
     return (
         <div className="h-[350px] w-[500px] bg-gray-300 rounded-md pb-5">
             <CloseIcon className="tag-window-close" onClick={closeWindow}/>
-            <form>
-                <input type='text' required placeholder="Enter new tag here" className="tag-window-input"/>
+            <form onSubmit={handleTagAdd}>
+                <input type='text' required placeholder="Enter new tag here" className="tag-window-input" id="new-tag-name"/>
             </form>
             <div className="tag-display-area">
-                {/* {tagMappings} */}
+                {imageTags.map(tag => {
+                    return <Tag tag={tag} photoId={currentImageId} imageTags={imageTags} setImageTags={setImageTags} />
+                })}
             </div>
+        </div>
+    )
+}
+
+const Tag = ({tag, photoId, imageTags, setImageTags}) => {
+    const handleDelete = e => {
+        e.preventDefault();
+        axios.delete(`/api/tag/${tag}/photo/${photoId}`)
+            .then(() => {
+                const tempArr = [...imageTags]
+                tempArr.splice(imageTags.indexOf(tag), 1)
+                setImageTags(tempArr);
+            })
+            .catch(err => console.log(err));
+    }
+
+    return (
+        <div className="tag">
+            <h4 className="w-fit mr-2">{tag}</h4>
+            <CloseIcon className="tag-remove" title="Delete tag" onClick={handleDelete} />
         </div>
     )
 }

@@ -135,14 +135,22 @@
     }
 
     .tag-window-input {
-    @apply w-[90%] h-[30px] px-3 rounded-md mb-5;
+    @apply w-[90%] h-[30px] px-3 rounded-md mb-5 text-black;
     }
 
     .tag-display-area {
-    @apply w-[90%] h-[230px] bg-white rounded-md mx-auto p-3;
+    @apply w-[90%] h-[230px] bg-white rounded-md mx-auto p-3 flex flex-wrap content-start;
     }
 
     .tag-window-close {
-    @apply mt-2 mb-3 ml-auto mr-5 h-[25px] text-black hover:text-red-500 hover:cursor-pointer;
+    @apply mt-2 mb-3 ml-auto mr-5 h-[25px] text-black hover:text-red-500 hover:cursor-pointer stroke-[28px];
+    }
+
+    .tag {
+    @apply w-fit h-7 px-2 py-1 text-white bg-blue-500 mx-2 my-1 rounded-md flex items-center
+    }
+
+    .tag-remove {
+    @apply hover:cursor-pointer hover:text-red-200 stroke-[28px];
     }
 }
