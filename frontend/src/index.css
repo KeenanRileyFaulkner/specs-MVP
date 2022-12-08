@@ -139,7 +139,7 @@
     }
 
     .tag-display-area {
-    @apply w-[90%] h-[230px] bg-white rounded-md mx-auto p-3 flex flex-wrap content-start;
+    @apply w-[90%] h-[230px] bg-white rounded-md mx-auto flex flex-wrap py-1 content-start;
     }
 
     .tag-window-close {

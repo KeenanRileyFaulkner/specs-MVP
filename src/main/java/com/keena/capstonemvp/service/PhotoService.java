@@ -45,7 +45,7 @@ public class PhotoService {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND)).getContent();
     }
 
-    public void removePhotos(Long photoId) {
+    public void removePhotos(Long photoId) { //this has a bug with not removing tags from the image before deletion.
 
         photoRepository.findById(photoId)
                 .map(photo -> {
