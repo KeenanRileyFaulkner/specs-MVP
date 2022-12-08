@@ -1,6 +1,6 @@
 import axios from "axios"
 import { useState, useEffect, useRef } from 'react'
-import { AiOutlinePlus as PlusIcon } from 'react-icons/ai'
+import { AiOutlinePlus as PlusIcon, AiOutlineClose as CloseIcon } from 'react-icons/ai'
 import { BsFillArrowLeftCircleFill as LeftArrowCircle, BsFillArrowRightCircleFill as RightArrowCircle } from 'react-icons/bs';
 
 const Photos = ({userId}) => {
@@ -75,9 +75,10 @@ const Photos = ({userId}) => {
             .catch(err => console.log(err));        
     }, [userId]);
 
-    let display;
+    let containerToDisplay;
+    let photoButtonToDisplay;
     if(tagWindowHidden) {
-        display = 
+        containerToDisplay = 
             <>
                 <button onClick={decrIndex}>
                     <LeftArrowCircle className="arrow-circle"/>
@@ -101,19 +102,8 @@ const Photos = ({userId}) => {
                     <RightArrowCircle className="arrow-circle"/>
                 </button>
             </>
-    } else {
-        display = 
-            <>
-                
-            </>
-    }
 
-    return (
-        <div className="main-content-container flex flex-col justify-center items-center">
-            <div className="flex">
-                {display}
-            </div>
-            
+        photoButtonToDisplay = 
             <AddPhotoButton 
                 userId={userId} 
                 setAllPhotoIds={setImageIds} 
@@ -123,7 +113,38 @@ const Photos = ({userId}) => {
                 setImageSources={setImageSources}
                 imageSources={imageSources}
                 setCurrentImageIndex={setCurrentImageIndex}
+                hidden={tagWindowHidden}
             />
+    } else {
+        containerToDisplay = <TagWindow setTagWindowHidden={toggleHidden} currentImageId={imageIds[currentImageIndex]}/>
+        photoButtonToDisplay=<></>
+    }
+
+    return (
+        <div className="main-content-container flex flex-col justify-center items-center">
+            <div className="flex">
+                {containerToDisplay}
+            </div>
+            
+            {photoButtonToDisplay}
+        </div>
+    )
+}
+
+const TagWindow = ({ setTagWindowHidden }) => {
+    const closeWindow = e => {
+        e.preventDefault();
+        setTagWindowHidden(true);
+    }
+    return (
+        <div className="h-[350px] w-[500px] bg-gray-300 rounded-md pb-5">
+            <CloseIcon className="tag-window-close" onClick={closeWindow}/>
+            <form>
+                <input type='text' required placeholder="Enter new tag here" className="tag-window-input"/>
+            </form>
+            <div className="tag-display-area">
+                {/* {tagMappings} */}
+            </div>
         </div>
     )
 }
@@ -182,7 +203,9 @@ const PhotoContainer = ({ currPhoto, currPhotoId, currentImageIndex, imageEndpoi
         <div className={`group max-h-[350px] max-w-[350px] min-w-[300px] min-h-[300px] relative ${disableHoverButtons ? '' : 'hover:bg-gray-400'}`}>
             {conditionalPhotoDisplay}
             
-            <button className={`photo-container-button group-hover:opacity-100 ${disableHoverButtons ? 'hidden' : 'visible'}`}>
+            <button className={`photo-container-button group-hover:opacity-100 ${disableHoverButtons ? 'hidden' : 'visible'}`}
+                onClick={displayTags}
+            >
                 View Tags
             </button>
             

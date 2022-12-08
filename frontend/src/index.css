@@ -134,5 +134,15 @@
     @apply bg-red-500 opacity-80;
     }
 
-    
+    .tag-window-input {
+    @apply w-[90%] h-[30px] px-3 rounded-md mb-5;
+    }
+
+    .tag-display-area {
+    @apply w-[90%] h-[230px] bg-white rounded-md mx-auto p-3;
+    }
+
+    .tag-window-close {
+    @apply mt-2 mb-3 ml-auto mr-5 h-[25px] text-black hover:text-red-500 hover:cursor-pointer;
+    }
 }
