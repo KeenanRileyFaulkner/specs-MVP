@@ -155,18 +155,18 @@
     }
 
     .project-photo-container {
-    @apply h-[200px] w-[200px] object-contain hover:cursor-pointer;
+    @apply h-[200px] w-[200px] object-contain hover:cursor-pointer relative;
     }
 
     .check-mark {
-    @apply h-5 w-5 relative;
+    @apply h-[22px] w-[22px] absolute top-2 right-2;
     }
 
     .selected-icon {
-    @apply h-5 w-5 text-blue-500 absolute top-0 left-0 z-10;
+    @apply h-5 w-5 text-blue-500 absolute left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%] z-10;
     }
 
     .selected-icon-background {
-    @apply h-4 w-4 text-white absolute left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%];
+    @apply h-[22px] w-[22px] text-white absolute left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%];
     }
 }
