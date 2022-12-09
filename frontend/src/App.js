@@ -3,6 +3,7 @@ import { useState } from 'react';
 import Header from './components/Header';
 import Photos from './components/pages/Photos';
 import UserAuthentication from './components/pages/UserAuthentication';
+import NewProjectPage from './components/pages/NewProjectPage';
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(false);
@@ -10,7 +11,7 @@ function App() {
 
   let toDisplay;
   if(loggedIn) {
-    toDisplay = <Photos userId={userId} />;
+    toDisplay = <NewProjectPage userId={userId} />;
   } else {
     toDisplay = <UserAuthentication setLoggedIn={setLoggedIn} setUserId={setUserId}/>;
   }

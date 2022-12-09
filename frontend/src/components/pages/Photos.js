@@ -57,10 +57,10 @@ const Photos = ({userId}) => {
             .catch(err => console.log(err));        
     }, [userId]);
 
-    let containerToDisplay;
+    let photoContainerToDisplay;
     let photoButtonToDisplay;
     if(tagWindowHidden) {
-        containerToDisplay = 
+        photoContainerToDisplay = 
             <>
                 <button onClick={decrIndex}>
                     <LeftArrowCircle className="arrow-circle"/>
@@ -98,14 +98,14 @@ const Photos = ({userId}) => {
                 hidden={tagWindowHidden}
             />
     } else {
-        containerToDisplay = <TagWindow setTagWindowHidden={toggleHidden} currentImageId={imageIds[currentImageIndex]}/>
+        photoContainerToDisplay = <TagWindow setTagWindowHidden={toggleHidden} currentImageId={imageIds[currentImageIndex]}/>
         photoButtonToDisplay=<></>
     }
 
     return (
         <div className="main-content-container flex flex-col justify-center items-center">
             <div className="flex">
-                {containerToDisplay}
+                {photoContainerToDisplay}
             </div>
             
             {photoButtonToDisplay}
