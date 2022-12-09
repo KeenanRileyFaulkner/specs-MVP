@@ -43,10 +43,19 @@ const NewProjectPage = ({ userId }) => {
                     : "Step 3: Add Project Info"}</h2>
                 <ProgressBar currStage={currStage} />
 
-                {/* {(imageSources.map(image => {
-                    return <ProjectPhoto image={image} />;
-                }))} */}
+                {/* Get image container in here */}
+                <PhotoContainer imageSources={imageSources} />
             </div>
+        </div>
+    )
+}
+
+const PhotoContainer = ({ imageSources }) => {
+    return (
+        <div className="all-photos-container">
+            {(imageSources.map(image => {
+                return <ProjectPhoto image={image} />;
+            }))}
         </div>
     )
 }

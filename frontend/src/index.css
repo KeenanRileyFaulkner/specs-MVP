@@ -155,11 +155,11 @@
     }
 
     .project-photo-container {
-    @apply h-[150px] w-[150px] object-contain hover:cursor-pointer relative;
+    @apply h-[200px] w-[200px] object-contain hover:cursor-pointer relative border-gray-300 border-[20px] rounded-lg;
     }
 
     .check-mark {
-    @apply h-[22px] w-[22px] absolute top-2 right-2;
+    @apply h-[22px] w-[22px] absolute -top-2 -right-2;
     }
 
     .selected-icon {
@@ -175,7 +175,7 @@
     }
 
     .progress-bar-background {
-    @apply w-[700px] h-[20px] bg-gray-400 rounded-3xl mt-[20px] relative;
+    @apply w-[700px] h-[20px] bg-gray-400 rounded-3xl my-[20px] relative;
     }
 
     .stage-number-container {
@@ -208,5 +208,9 @@
 
     .step-instructions {
     @apply text-black font-semibold text-[24pt] my-5;
+    }
+
+    .all-photos-container {
+    @apply h-[400px] w-[900px] mt-10 bg-gray-400 rounded-lg px-1 py-1 flex flex-wrap;
     }
 }
