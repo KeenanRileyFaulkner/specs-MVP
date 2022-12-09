@@ -18,7 +18,7 @@ const Header = () => {
                     <IconTooltip icon={<PhotoIcon/>} text="Photos" />
                 </Link>
                 <Link to='/projects-view'>
-                    <IconTooltip icon={<ProjectIcon/>} text="View Projects" />
+                    <IconTooltip icon={<ProjectIcon/>} text="View Mosaics" />
                 </Link>
                 <Link to='/project-creation'>
                     <IconTooltip icon={<CreateIcon/>} text="New Project" />
@@ -129,7 +129,7 @@ const MenuDropdown = ({ expanded, toggleExpanded }) => {
         <div className={`menu-dropdown-container ${scale} transition-all duration-200 origin-top-right`}>
             <button className='dropdown-btn' onClick={navToSkills}>Photos -- 📷</button>
             <hr className='dropdown-hr'/>
-            <button className='dropdown-btn' onClick={navToProjects}>View Projects -- 👷</button>
+            <button className='dropdown-btn' onClick={navToProjects}>View Mosaics -- 🖼️</button>
             <hr className='dropdown-hr'/>
             <button className='dropdown-btn' onClick={navToContact}>New Project -- ✏️</button>
             <hr className='dropdown-hr'/>
