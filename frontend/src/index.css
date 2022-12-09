@@ -151,6 +151,6 @@
     }
 
     .tag-remove {
-    @apply hover:cursor-pointer hover:text-red-200 stroke-[28px];
+    @apply hover:cursor-pointer hover:text-white text-gray-300 stroke-[28px];
     }
 }

@@ -149,7 +149,7 @@ const TagWindow = ({ setTagWindowHidden, currentImageId }) => {
 
     return (
         <div className="h-[350px] w-[500px] bg-gray-300 rounded-md pb-5">
-            <CloseIcon className="tag-window-close" onClick={closeWindow}/>
+            <CloseIcon className="tag-window-close" onClick={closeWindow} size='18'/>
             <form onSubmit={handleTagAdd}>
                 <input type='text' required placeholder="Enter new tag here" className="tag-window-input" id="new-tag-name"/>
             </form>
