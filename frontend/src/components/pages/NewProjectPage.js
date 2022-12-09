@@ -11,6 +11,7 @@ const NewProjectPage = ({ userId }) => {
     const [imageSources, setImageSources] = useState([]);
     const [currStage, setCurrStage] = useState(1);
     const [mainPhoto, setMainPhoto] = useState({});
+    const [tilePhotos, setTilePhotos] = useState([]);
 
     const handleNextStage = e => {
         if(currStage < 3) {
@@ -24,6 +25,7 @@ const NewProjectPage = ({ userId }) => {
         }
     }
 
+    //this effect gets the photos from the backend when the page loads.
     useEffect(() => {
         axios.get(`/api/user/${userId}/photos`)
             .then(res => {
@@ -50,9 +52,28 @@ const NewProjectPage = ({ userId }) => {
             .catch(err => console.log(err));
     }, [])
 
+    //this will become the effect that maintains the request body
     useEffect(() => {
         console.log(mainPhoto);
-    }, [mainPhoto]);
+        console.log(tilePhotos);
+    }, [mainPhoto, tilePhotos]);
+
+
+    const [imageSourcesForTiles, setImageSourcesForTiles] = useState(imageSources);
+    const [imageIdsForTiles, setImageIdsForTiles] = useState(imageIds);
+    useEffect(() => {
+        if(mainPhoto.mainPhoto !== undefined) {
+            const tempArrForSources = [...imageSources];
+            tempArrForSources.splice(imageIds.indexOf(mainPhoto.mainPhoto), 1);
+            const tempArrForIds = [...imageIds];
+            tempArrForIds.splice(imageIds.indexOf(mainPhoto.mainPhoto), 1);
+            setImageIdsForTiles(tempArrForIds);
+            setImageSourcesForTiles(tempArrForSources);
+        } else {
+            setImageSourcesForTiles(imageSources);
+            setImageIdsForTiles(imageIds);
+        }
+    }, [mainPhoto.mainPhoto]);
 
     
     return (
@@ -66,7 +87,12 @@ const NewProjectPage = ({ userId }) => {
 
                 <ProgressBar currStage={currStage} />
 
-                <PhotoContainerMainSelect imageSources={imageSources} setMainPhoto={setMainPhoto} imageIds={imageIds}/>
+                { currStage === 1 ?
+                    <PhotoContainerMainSelect imageSources={imageSources} setMainPhoto={setMainPhoto} imageIds={imageIds}/>
+                  : currStage === 2 ? 
+                    <PhotoContainerTileSelect imageSources={imageSourcesForTiles} imageIds={imageIdsForTiles} setTilePhotos={setTilePhotos} />
+                  : <MetaDataForm />
+                }
 
                 <div className="stage-change-container">
                     <div className={`stage-change-button ${currStage <= 1 ? "disabled" : ""}`} onClick={handlePrevStage}>
@@ -85,7 +111,7 @@ const NewProjectPage = ({ userId }) => {
 const PhotoContainerMainSelect = ({ imageSources, setMainPhoto, imageIds }) => {
 
     const [photoSelectionArray, setPhotoSelectionArray] = useState(new Array(imageSources.length).fill(false));
-    const [currSelection, setCurrSelection] = useState(-1)
+    const [currSelection, setCurrSelection] = useState(-1);
 
     const setSelected = (index) => {
         const arr = new Array(imageSources.length).fill(false);
@@ -104,13 +130,18 @@ const PhotoContainerMainSelect = ({ imageSources, setMainPhoto, imageIds }) => {
     return (
         <div className="all-photos-container">
             {(imageSources.map((image, index) => {
-                return <ProjectPhoto image={image} selected={photoSelectionArray[index]} indexNum={index} setCurrSelection={setCurrSelection} />;
+                return (<MainProjectPhoto 
+                        image={image} 
+                        selected={photoSelectionArray[index]} 
+                        indexNum={index} 
+                        setCurrSelection={setCurrSelection} 
+                        />);
             }))}
         </div>
     )
 }
 
-const ProjectPhoto = ({ image, selected, indexNum, setCurrSelection }) => {
+const MainProjectPhoto = ({ image, selected, indexNum, setCurrSelection }) => {
 
     const toggleSelected = e => {
         if(selected) {
@@ -118,6 +149,73 @@ const ProjectPhoto = ({ image, selected, indexNum, setCurrSelection }) => {
         } else {
             setCurrSelection(indexNum);
         }
+    }
+
+    return (
+        <div className={`project-photo-container ${selected ? "bg-white bg-opacity-50 border-gray-100 border-[10px]" : ""}`} 
+            onClick={toggleSelected}
+        >
+            <div className={`image-wrapper ${selected ? "image-selected" : ""}`}>
+                <img src={image} alt="" className={`bg-gray-400 ${selected ? "opacity-90" : ""}`} />
+            </div>
+            
+            <div className={`${selected ? "visible" : "hidden"} check-mark`}>
+                <SelectedIcon className="selected-icon" />
+                <Circle className="selected-icon-background" />
+            </div>
+        </div>
+    )
+}
+
+const PhotoContainerTileSelect = ({ imageSources, imageIds, setTilePhotos }) => {
+
+    const [photoSelectionArray, setPhotoSelectionArray] = useState(new Array(imageSources.length).fill(false));
+
+    useEffect(() => {
+        const selectedPhotoIds = [];
+        photoSelectionArray.forEach((photo, index) => {
+            if(photo) {
+                selectedPhotoIds.push(imageIds[index]);
+            }
+        });
+        setTilePhotos(selectedPhotoIds);
+    }, [photoSelectionArray]);
+
+    // const select = (index) => {
+    //     const tempArr = [...photoSelectionArray];
+    //     tempArr[index] = true;
+    //     setPhotoSelectionArray(tempArr);
+    // }
+
+    // const unselect = (index) => {
+    //     const tempArr = [...photoSelectionArray];
+    //     tempArr[index] = false;
+    //     setPhotoSelectionArray(tempArr);
+    // }
+
+
+    return (
+        <div className="all-photos-container">
+            {(imageSources.map((image, index) => {
+                return (<TileProjectPhoto 
+                        image={image} 
+                        selected={photoSelectionArray[index]} 
+                        indexNum={index} 
+                        setPhotoSelectionArray={setPhotoSelectionArray}
+                        photoSelectionArray={photoSelectionArray} 
+                        />);
+            }))}
+        </div>
+    )
+}
+
+const TileProjectPhoto = ({selected, image, indexNum, setPhotoSelectionArray, photoSelectionArray}) => {
+
+    const toggleSelected = () => {
+        const tempArr = [...photoSelectionArray];
+        const currVal = tempArr[indexNum]
+        tempArr[indexNum] = !currVal;
+        setPhotoSelectionArray(tempArr);
     }
 
     return (
@@ -156,6 +254,10 @@ const StageNumber = ({ number, currStage }) => {
             <h4 className="stage-number">{number}</h4>
         </div>
     )
+}
+
+const MetaDataForm = () => {
+
 }
 
 export default NewProjectPage;
