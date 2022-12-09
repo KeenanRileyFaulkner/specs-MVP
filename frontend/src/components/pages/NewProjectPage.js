@@ -11,6 +11,18 @@ const NewProjectPage = ({ userId }) => {
     const [imageSources, setImageSources] = useState([]);
     const [currStage, setCurrStage] = useState(1);
 
+    const handleNextStage = e => {
+        if(currStage < 3) {
+            setCurrStage(currStage + 1);
+        }
+    }
+
+    const handlePrevStage = e => {
+        if(currStage > 1) {
+            setCurrStage(currStage - 1);
+        }
+    }
+
     useEffect(() => {
         axios.get(`/api/user/${userId}/photos`)
             .then(res => {
@@ -52,8 +64,13 @@ const NewProjectPage = ({ userId }) => {
                 <PhotoContainer imageSources={imageSources} />
 
                 <div className="stage-change-container">
-                    <div className="stage-change-button"><PreviousButton className="text-white" size="30"/></div>
-                    <div className="stage-change-button"><NextButton className="text-white" size="30"/></div>
+                    <div className={`stage-change-button ${currStage <= 1 ? "disabled" : ""}`} onClick={handlePrevStage}>
+                        <PreviousButton className="text-white" size="30"/>
+                    </div>
+
+                    <div className={`stage-change-button ${currStage >= 3 ? "disabled" : "" }`} onClick={handleNextStage}>
+                        <NextButton className="text-white" size="30"/>
+                    </div>
                 </div>
             </div>            
         </div>
@@ -79,8 +96,12 @@ const ProjectPhoto = ({ image }) => {
     }
 
     return (
-        <div className={`project-photo-container ${selected ? "bg-white bg-opacity-50" : ""}`} onClick={toggleSelected}>
-            <div className="image-wrapper"><img src={image} alt="" className={`bg-gray-400 ${selected ? "opacity-90" : ""}`} /></div>
+        <div className={`project-photo-container ${selected ? "bg-white bg-opacity-50 border-gray-100 border-[10px]" : ""}`} 
+            onClick={toggleSelected}
+        >
+            <div className={`image-wrapper ${selected ? "image-selected" : ""}`}>
+                <img src={image} alt="" className={`bg-gray-400 ${selected ? "opacity-90" : ""}`} />
+            </div>
             
             <div className={`${selected ? "visible" : "hidden"} check-mark`}>
                 <SelectedIcon className="selected-icon" />

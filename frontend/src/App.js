@@ -11,7 +11,9 @@ function App() {
 
   let toDisplay;
   if(loggedIn) {
-    toDisplay = <NewProjectPage userId={userId} />;
+    toDisplay = 
+    <NewProjectPage userId={userId} />; 
+    // <Photos userId={userId}/>;
   } else {
     toDisplay = <UserAuthentication setLoggedIn={setLoggedIn} setUserId={setUserId}/>;
   }

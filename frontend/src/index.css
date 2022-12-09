@@ -156,27 +156,31 @@
 
     .project-photo-container {
     @apply h-[200px] w-[200px] object-contain object-center 
-        hover:cursor-pointer relative border-gray-100 border-[20px] rounded-lg mx-1 my-1;
+        hover:cursor-pointer relative rounded-lg mx-1 my-1;
     }
 
     .image-wrapper {
-    @apply w-[160px] h-[160px] object-contain overflow-hidden;
+    @apply w-[200px] h-[200px] object-contain overflow-hidden absolute rounded-md;
+    }
+
+    .image-selected {
+    @apply w-[180px] h-[180px] top-0 left-0 rounded-none;
     }
 
     .check-mark {
-    @apply h-[22px] w-[22px] absolute -top-2 -right-2 z-30;
+    @apply h-[28px] w-[28px] absolute -top-2 -right-2 z-30;
     }
 
     .selected-icon {
-    @apply h-5 w-5 text-blue-500 absolute left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%] z-10;
+    @apply h-[26px] w-[26px] text-blue-500 absolute left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%] z-10;
     }
 
     .selected-icon-background {
-    @apply h-[22px] w-[22px] text-white absolute left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%];
+    @apply h-[28px] w-[28px] text-white absolute left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%];
     }
 
     .project-creation-container {
-    @apply h-[650px] w-[1100px] bg-gray-200 rounded-md flex mt-20 flex-col items-center;
+    @apply h-[550px] w-[1000px] bg-gray-200 rounded-md flex mt-20 flex-col items-center;
     }
 
     .progress-bar-background {
@@ -226,5 +230,9 @@
 
     .stage-change-button {
     @apply h-[30px] w-[60px] bg-blue-500 m-5 flex justify-center items-center rounded-md hover:cursor-pointer;
+    }
+
+    .disabled {
+    @apply bg-gray-400 hover:cursor-default;
     }
 }
