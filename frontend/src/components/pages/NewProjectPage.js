@@ -61,7 +61,7 @@ const NewProjectPage = ({ userId }) => {
 
                 <ProgressBar currStage={currStage} />
 
-                <PhotoContainer imageSources={imageSources} />
+                <PhotoContainerMainSelect imageSources={imageSources} />
 
                 <div className="stage-change-container">
                     <div className={`stage-change-button ${currStage <= 1 ? "disabled" : ""}`} onClick={handlePrevStage}>
@@ -77,22 +77,38 @@ const NewProjectPage = ({ userId }) => {
     )
 }
 
-const PhotoContainer = ({ imageSources }) => {
+const PhotoContainerMainSelect = ({ imageSources }) => {
+
+    const [photoSelectionArray, setPhotoSelectionArray] = useState(new Array(imageSources.length).fill(false));
+    const [currSelection, setCurrSelection] = useState(-1)
+
+    const setSelected = (index) => {
+        const arr = new Array(imageSources.length).fill(false);
+        if (index != -1) { arr[index] = true; }
+        setPhotoSelectionArray(arr);
+    }
+
+    useEffect(() => {
+        setSelected(currSelection);
+    }, [currSelection]);
+
     return (
         <div className="all-photos-container">
-            {(imageSources.map(image => {
-                return <ProjectPhoto image={image} />;
+            {(imageSources.map((image, index) => {
+                return <ProjectPhoto image={image} selected={photoSelectionArray[index]} indexNum={index} setCurrSelection={setCurrSelection} />;
             }))}
         </div>
     )
 }
 
-const ProjectPhoto = ({ image }) => {
-
-    const [selected, setSelected] = useState(false);
+const ProjectPhoto = ({ image, selected, indexNum, setCurrSelection }) => {
 
     const toggleSelected = e => {
-        setSelected(!selected);
+        if(selected) {
+            setCurrSelection(-1);
+        } else {
+            setCurrSelection(indexNum);
+        }
     }
 
     return (
