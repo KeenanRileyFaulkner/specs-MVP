@@ -36,12 +36,14 @@ const NewProjectPage = ({ userId }) => {
             })
             .catch(err => console.log(err));
     }, [])
+
+    
     return (
         <div className="main-content-container flex flex-col justify-center items-center">
             <div className="project-creation-container">
 
-                <h2 className="step-instructions">{currStage == 1 ? "Step 1: Choose a main photo" 
-                    : currStage == 2 ? "Step 2: Choose tile photos" 
+                <h2 className="step-instructions">{currStage === 1 ? "Step 1: Choose a main photo" 
+                    : currStage === 2 ? "Step 2: Choose tile photos" 
                     : "Step 3: Add Project Info"}
                 </h2>
 
@@ -78,7 +80,7 @@ const ProjectPhoto = ({ image }) => {
 
     return (
         <div className={`project-photo-container ${selected ? "bg-white bg-opacity-50" : ""}`} onClick={toggleSelected}>
-            <div className="image-wrapper"><img src={image} className={`bg-gray-400 ${selected ? "opacity-90" : ""}`} /></div>
+            <div className="image-wrapper"><img src={image} alt="" className={`bg-gray-400 ${selected ? "opacity-90" : ""}`} /></div>
             
             <div className={`${selected ? "visible" : "hidden"} check-mark`}>
                 <SelectedIcon className="selected-icon" />
@@ -92,7 +94,7 @@ const ProgressBar = ({ currStage }) => {
 
     return (
         <div className="progress-bar-background">
-            <div className={`progress-in-green ${currStage == 1 ? "w-[100px]" : currStage == 2 ? "w-[350px]" : "w-[600px]" }`} />
+            <div className={`progress-in-green ${currStage === 1 ? "w-[100px]" : currStage === 2 ? "w-[350px]" : "w-[600px]" }`} />
             <StageNumber number={1} currStage={currStage} />
             <StageNumber number={2} currStage={currStage} />
             <StageNumber number={3} currStage={currStage} />
