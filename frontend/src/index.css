@@ -188,7 +188,7 @@
     }
 
     .stage-number-circle {
-    @apply absolute left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%] z-10 transition-colors delay-[150ms];
+    @apply absolute left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%] z-10 transition-colors delay-[175ms];
     }
 
     .stage-number {
@@ -216,7 +216,15 @@
     }
 
     .all-photos-container {
-    @apply h-[400px] w-[850px] mt-10 bg-gray-400 px-1 py-1 flex flex-wrap overflow-y-scroll
+    @apply h-[350px] w-[850px] mt-10 bg-gray-400 px-1 py-1 flex flex-wrap overflow-y-scroll
         scrollbar-thin scrollbar-thumb-gray-500;
+    }
+
+    .stage-change-container {
+    @apply w-[200px] h-[100px] flex justify-center items-center;
+    }
+
+    .stage-change-button {
+    @apply h-[30px] w-[60px] bg-blue-500 m-5 flex justify-center items-center rounded-md hover:cursor-pointer;
     }
 }

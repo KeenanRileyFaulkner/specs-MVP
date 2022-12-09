@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { BsCheckCircleFill as SelectedIcon, BsFillCircleFill as Circle } from 'react-icons/bs';
+import { HiOutlineArrowNarrowLeft as PreviousButton, HiOutlineArrowNarrowRight as NextButton } from 'react-icons/hi';
 
 
 const NewProjectPage = ({ userId }) => {
@@ -38,14 +39,21 @@ const NewProjectPage = ({ userId }) => {
     return (
         <div className="main-content-container flex flex-col justify-center items-center">
             <div className="project-creation-container">
+
                 <h2 className="step-instructions">{currStage == 1 ? "Step 1: Choose a main photo" 
                     : currStage == 2 ? "Step 2: Choose tile photos" 
-                    : "Step 3: Add Project Info"}</h2>
+                    : "Step 3: Add Project Info"}
+                </h2>
+
                 <ProgressBar currStage={currStage} />
 
-                {/* Get image container in here */}
                 <PhotoContainer imageSources={imageSources} />
-            </div>
+
+                <div className="stage-change-container">
+                    <div className="stage-change-button"><PreviousButton className="text-white" size="30"/></div>
+                    <div className="stage-change-button"><NextButton className="text-white" size="30"/></div>
+                </div>
+            </div>            
         </div>
     )
 }
