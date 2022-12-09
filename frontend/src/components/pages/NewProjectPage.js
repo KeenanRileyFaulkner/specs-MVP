@@ -8,6 +8,7 @@ const NewProjectPage = ({ userId }) => {
     const [imageIds, setImageIds] = useState([]);
     const [imageEndpoints, setImageEndpoints] = useState([]);
     const [imageSources, setImageSources] = useState([]);
+    const [currStage, setCurrStage] = useState(1);
 
     useEffect(() => {
         axios.get(`/api/user/${userId}/photos`)
@@ -36,9 +37,16 @@ const NewProjectPage = ({ userId }) => {
     }, [])
     return (
         <div className="main-content-container flex flex-col justify-center items-center">
-            {(imageSources.map(image => {
-                return <ProjectPhoto image={image} />;
-            }))}
+            <div className="project-creation-container">
+                <h2 className="step-instructions">{currStage == 1 ? "Step 1: Choose a main photo" 
+                    : currStage == 2 ? "Step 2: Choose tile photos" 
+                    : "Step 3: Add Project Info"}</h2>
+                <ProgressBar currStage={currStage} />
+
+                {/* {(imageSources.map(image => {
+                    return <ProjectPhoto image={image} />;
+                }))} */}
+            </div>
         </div>
     )
 }
@@ -59,6 +67,28 @@ const ProjectPhoto = ({ image }) => {
                 <SelectedIcon className="selected-icon" />
                 <Circle className="selected-icon-background" />
             </div>
+        </div>
+    )
+}
+
+const ProgressBar = ({ currStage }) => {
+
+    return (
+        <div className="progress-bar-background">
+            <div className={`progress-in-green ${currStage == 1 ? "w-[100px]" : currStage == 2 ? "w-[350px]" : "w-[600px]" }`} />
+            <StageNumber number={1} currStage={currStage} />
+            <StageNumber number={2} currStage={currStage} />
+            <StageNumber number={3} currStage={currStage} />
+        </div>
+    );
+}
+
+const StageNumber = ({ number, currStage }) => {
+
+    return (
+        <div className="stage-number-container">
+            <Circle size="50" className={`stage-number-circle ${currStage < number ? "text-gray-400" : "text-green-500"}`}/>
+            <h4 className="stage-number">{number}</h4>
         </div>
     )
 }

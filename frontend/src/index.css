@@ -155,7 +155,7 @@
     }
 
     .project-photo-container {
-    @apply h-[200px] w-[200px] object-contain hover:cursor-pointer relative;
+    @apply h-[150px] w-[150px] object-contain hover:cursor-pointer relative;
     }
 
     .check-mark {
@@ -168,5 +168,45 @@
 
     .selected-icon-background {
     @apply h-[22px] w-[22px] text-white absolute left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%];
+    }
+
+    .project-creation-container {
+    @apply h-[650px] w-[1100px] bg-gray-300 rounded-md flex mt-20 flex-col items-center;
+    }
+
+    .progress-bar-background {
+    @apply w-[700px] h-[20px] bg-gray-400 rounded-3xl mt-[20px] relative;
+    }
+
+    .stage-number-container {
+    @apply w-[50px] h-[50px] my-[-15px] absolute top-0 left-0;
+    }
+
+    .stage-number-circle {
+    @apply absolute left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%] z-10 transition-colors delay-[150ms];
+    }
+
+    .stage-number {
+    @apply text-black text-[16pt] font-semibold absolute left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%] z-20;
+    }
+
+    .stage-number-container:nth-child(2) {
+    @apply left-20;
+    }
+
+    .stage-number-container:nth-child(3) {
+    @apply left-[50%] translate-x-[-50%];
+    }
+
+    .stage-number-container:last-child {
+    @apply left-[580px];
+    }
+
+    .progress-in-green {
+    @apply h-[20px] rounded-3xl left-0 z-0 bg-green-500 transition-all duration-300;
+    }
+
+    .step-instructions {
+    @apply text-black font-semibold text-[24pt] my-5;
     }
 }
