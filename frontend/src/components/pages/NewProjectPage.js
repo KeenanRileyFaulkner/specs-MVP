@@ -10,6 +10,7 @@ const NewProjectPage = ({ userId }) => {
     const [imageEndpoints, setImageEndpoints] = useState([]);
     const [imageSources, setImageSources] = useState([]);
     const [currStage, setCurrStage] = useState(1);
+    const [mainPhoto, setMainPhoto] = useState({});
 
     const handleNextStage = e => {
         if(currStage < 3) {
@@ -49,6 +50,10 @@ const NewProjectPage = ({ userId }) => {
             .catch(err => console.log(err));
     }, [])
 
+    useEffect(() => {
+        console.log(mainPhoto);
+    }, [mainPhoto]);
+
     
     return (
         <div className="main-content-container flex flex-col justify-center items-center">
@@ -61,7 +66,7 @@ const NewProjectPage = ({ userId }) => {
 
                 <ProgressBar currStage={currStage} />
 
-                <PhotoContainerMainSelect imageSources={imageSources} />
+                <PhotoContainerMainSelect imageSources={imageSources} setMainPhoto={setMainPhoto} imageIds={imageIds}/>
 
                 <div className="stage-change-container">
                     <div className={`stage-change-button ${currStage <= 1 ? "disabled" : ""}`} onClick={handlePrevStage}>
@@ -77,7 +82,7 @@ const NewProjectPage = ({ userId }) => {
     )
 }
 
-const PhotoContainerMainSelect = ({ imageSources }) => {
+const PhotoContainerMainSelect = ({ imageSources, setMainPhoto, imageIds }) => {
 
     const [photoSelectionArray, setPhotoSelectionArray] = useState(new Array(imageSources.length).fill(false));
     const [currSelection, setCurrSelection] = useState(-1)
@@ -87,6 +92,10 @@ const PhotoContainerMainSelect = ({ imageSources }) => {
         if (index != -1) { arr[index] = true; }
         setPhotoSelectionArray(arr);
     }
+
+    useEffect(() => {
+        setMainPhoto({"mainPhoto": imageIds[currSelection]});
+    }, [currSelection]);
 
     useEffect(() => {
         setSelected(currSelection);
