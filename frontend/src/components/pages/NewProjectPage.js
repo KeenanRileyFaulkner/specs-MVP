@@ -70,7 +70,7 @@ const ProjectPhoto = ({ image }) => {
 
     return (
         <div className={`project-photo-container ${selected ? "bg-white bg-opacity-50" : ""}`} onClick={toggleSelected}>
-            <img src={image} className={`bg-gray-400 ${selected ? "opacity-90" : ""}`} />
+            <div className="image-wrapper"><img src={image} className={`bg-gray-400 ${selected ? "opacity-90" : ""}`} /></div>
             
             <div className={`${selected ? "visible" : "hidden"} check-mark`}>
                 <SelectedIcon className="selected-icon" />

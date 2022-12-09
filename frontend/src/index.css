@@ -155,11 +155,16 @@
     }
 
     .project-photo-container {
-    @apply h-[200px] w-[200px] object-contain hover:cursor-pointer relative border-gray-300 border-[20px] rounded-lg;
+    @apply h-[200px] w-[200px] object-contain object-center 
+        hover:cursor-pointer relative border-gray-100 border-[20px] rounded-lg mx-1 my-1;
+    }
+
+    .image-wrapper {
+    @apply w-[160px] h-[160px] object-contain overflow-hidden;
     }
 
     .check-mark {
-    @apply h-[22px] w-[22px] absolute -top-2 -right-2;
+    @apply h-[22px] w-[22px] absolute -top-2 -right-2 z-30;
     }
 
     .selected-icon {
@@ -171,7 +176,7 @@
     }
 
     .project-creation-container {
-    @apply h-[650px] w-[1100px] bg-gray-300 rounded-md flex mt-20 flex-col items-center;
+    @apply h-[650px] w-[1100px] bg-gray-200 rounded-md flex mt-20 flex-col items-center;
     }
 
     .progress-bar-background {
@@ -211,6 +216,7 @@
     }
 
     .all-photos-container {
-    @apply h-[400px] w-[900px] mt-10 bg-gray-400 rounded-lg px-1 py-1 flex flex-wrap;
+    @apply h-[400px] w-[850px] mt-10 bg-gray-400 px-1 py-1 flex flex-wrap overflow-y-scroll
+        scrollbar-thin scrollbar-thumb-gray-500;
     }
 }
