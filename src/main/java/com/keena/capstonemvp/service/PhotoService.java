@@ -3,6 +3,7 @@ package com.keena.capstonemvp.service;
 import com.keena.capstonemvp.entity.Photo;
 import com.keena.capstonemvp.entity.Tag;
 import com.keena.capstonemvp.repository.PhotoRepository;
+import com.keena.capstonemvp.repository.TagRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -11,6 +12,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
 
 @Service
 public class PhotoService {
@@ -45,16 +47,23 @@ public class PhotoService {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND)).getContent();
     }
 
-    public void removePhotos(Long photoId) { //this has a bug with not removing tags from the image before deletion.
+    @Autowired
+    TagRepository tagRepository;
 
-        photoRepository.findById(photoId)
-                .map(photo -> {
-                    photo.setParent(null);
-                    return photoRepository.save(photo);
-                })
+    public void removePhotos(Long photoId) {
+
+        Photo photo = photoRepository.findById(photoId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
+        photo.setParent(null);
+
+        Collection<Tag> photoTags = photo.getTags();
         photoRepository.deleteById(photoId);
+        photoTags.forEach(tag -> {
+            if(tag.getPhotos().size() == 0) {
+                tagRepository.delete(tag);
+            }
+        });
     }
 
     public boolean updatePhotoPrivacy(Long photoId) {

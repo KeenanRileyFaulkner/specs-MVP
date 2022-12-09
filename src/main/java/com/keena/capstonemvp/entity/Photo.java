@@ -41,6 +41,13 @@ public class Photo {
     @Column(name = "tags")
     private Collection<Tag> tags;
 
+    @PreRemove
+    private void removePhotosFromTags() {
+        for (Tag t : tags) {
+            t.getPhotos().remove(this);
+        }
+    }
+
     @ManyToOne
     @JoinColumn(name = "photo_owner")
     private User owner;
@@ -106,6 +113,12 @@ public class Photo {
 
     public void removeTag(Tag tag) {
         this.getTags().remove(tag);
+    }
+
+    public void removeAllTags() {
+        for(Tag t : this.getTags()) {
+            removeTag(t);
+        }
     }
 
     @Override
