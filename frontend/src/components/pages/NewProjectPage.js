@@ -181,18 +181,6 @@ const PhotoContainerTileSelect = ({ imageSources, imageIds, setTilePhotos }) => 
         setTilePhotos(selectedPhotoIds);
     }, [photoSelectionArray]);
 
-    // const select = (index) => {
-    //     const tempArr = [...photoSelectionArray];
-    //     tempArr[index] = true;
-    //     setPhotoSelectionArray(tempArr);
-    // }
-
-    // const unselect = (index) => {
-    //     const tempArr = [...photoSelectionArray];
-    //     tempArr[index] = false;
-    //     setPhotoSelectionArray(tempArr);
-    // }
-
 
     return (
         <div className="all-photos-container">
