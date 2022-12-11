@@ -44,8 +44,25 @@ const NewProjectPage = ({ userId }) => {
 
     //method to revert to previous step in creating a project
     const handlePrevStage = e => {
+        const stage2 = "reselect your main photo if you do."
+        const stage3 = "reselect all the tile photos for your project if you do."
+        const stage4 = "re-type your project title if you do."
         if(currStage > 1) {
-            setCurrStage(currStage - 1);
+            if (currStage == 2){
+                if(window.confirm(`Are you sure you want to go back? You will have to ${stage2}`)) {
+                    setCurrStage(currStage - 1);
+                }
+            } else if (currStage == 3) {
+                if(window.confirm(`Are you sure you want to go back? You will have to ${stage3}`)) {
+                    setCurrStage(currStage - 1);
+                }
+            } else if (currStage == 4) {
+                if(window.confirm(`Are you sure you want to go back? You will have to ${stage4}`)) {
+                    setCurrStage(currStage - 1);
+                }
+            } else {
+                setCurrStage(currStage - 1);
+            }
         }
     }
 
@@ -363,7 +380,7 @@ const ProcessedProjectInfo = ({ processApproved, setStartNewProject }) => {
     return (
         <div className="project-submission-info">
             <h2>{displayMessage}</h2>
-            {processApproved ? <button className="start-new-project-button" onClick={handleClick}>Start a new project</button> : ""}
+            <button className="start-new-project-button" onClick={handleClick}>Start a new project</button>
         </div>
     );
 }
