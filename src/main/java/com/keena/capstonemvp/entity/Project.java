@@ -27,6 +27,13 @@ public class Project {
     @Column(name = "tiling_photos")
     private Collection<Photo> tilingPhotos;
 
+    @PreRemove
+    private void removeProjectsFromPhotos() {
+        for(Photo p : tilingPhotos) {
+            p.getProjectsAsTile().remove(this);
+        }
+    }
+
     public Collection<Photo> getTilingPhotos() {
         if(this.tilingPhotos == null) {
             this.tilingPhotos = new ArrayList<>();
@@ -37,4 +44,7 @@ public class Project {
     @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "project_owner")
     private User projectOwner;
+
+    @Column(name = "project_name")
+    private String projectName;
 }
