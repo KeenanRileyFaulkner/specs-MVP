@@ -211,8 +211,8 @@
     @apply left-[580px];
     }
 
-    .progress-in-green {
-    @apply h-[20px] rounded-3xl left-0 z-0 bg-green-500 transition-all duration-300;
+    .progress-bar {
+    @apply h-[20px] rounded-3xl left-0 z-0 transition-all duration-300;
     }
 
     .step-instructions {
@@ -234,5 +234,25 @@
 
     .disabled {
     @apply bg-gray-400 hover:cursor-default;
+    }
+
+    .project-form-container {
+    @apply h-[350px] w-[650px] text-black mt-10 font-semibold text-[16pt] flex flex-col pt-[80px];
+    }
+
+    #project-name {
+    @apply ml-2 w-[60%] h-[35px] pl-2 text-[14pt] font-normal;
+    }
+
+    .num-tiles-header {
+    @apply mt-3 ml-[56px] text-left
+    }
+
+    .project-submission-info {
+    @apply h-[350px] w-[650px] text-black mt-10 font-semibold text-[16pt] flex flex-col pt-[80px];
+    }
+
+    .start-new-project-button {
+    @apply text-[12pt] underline hover:text-blue-500 mt-4
     }
 }

@@ -1,7 +1,9 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { AiOutlineConsoleSql } from "react-icons/ai";
 import { BsCheckCircleFill as SelectedIcon, BsFillCircleFill as Circle } from 'react-icons/bs';
 import { HiOutlineArrowNarrowLeft as PreviousButton, HiOutlineArrowNarrowRight as NextButton } from 'react-icons/hi';
+import { RiContactsBookLine } from "react-icons/ri";
 
 
 const NewProjectPage = ({ userId }) => {
@@ -12,10 +14,32 @@ const NewProjectPage = ({ userId }) => {
     const [currStage, setCurrStage] = useState(1);
     const [mainPhoto, setMainPhoto] = useState({});
     const [tilePhotos, setTilePhotos] = useState([]);
+    const [projectTitle, setProjectTitle] = useState("");
+    const [processedProject, setProcessedProject] = useState(false);
+    const [startNewProject, setStartNewProject] = useState(false);
 
     const handleNextStage = e => {
-        if(currStage < 3) {
-            setCurrStage(currStage + 1);
+        if (currStage === 1) {
+            if(mainPhoto.mainPhoto === undefined) {
+                alert("You must choose a main photo for your project");
+                return;
+            } else {
+                setCurrStage(currStage + 1);
+            }
+        } else if (currStage === 2) {
+            if(tilePhotos.length < 10) {
+                alert("You must choose at least 10 tile photos for your mosaic. Upload more photos if you need to.");
+                return;
+            } else {
+                setCurrStage(currStage + 1);
+            }
+        } else if (currStage === 3) {
+            if(projectTitle === "") {
+                alert("You must designate a title for your project.");
+                return;
+            } else {
+                setCurrStage(currStage + 1);
+            }
         }
     }
 
@@ -27,6 +51,7 @@ const NewProjectPage = ({ userId }) => {
 
     //this effect gets the photos from the backend when the page loads.
     useEffect(() => {
+        setCurrStage(1);
         axios.get(`/api/user/${userId}/photos`)
             .then(res => {
                 setImageIds(res.data);
@@ -50,15 +75,38 @@ const NewProjectPage = ({ userId }) => {
                     });
             })
             .catch(err => console.log(err));
-    }, [])
+    }, []);
 
     //this will become the effect that maintains the request body
     useEffect(() => {
-        console.log(mainPhoto);
-        console.log(tilePhotos);
-    }, [mainPhoto, tilePhotos]);
+        if(currStage !== 4) {
+            return;
+        }
+        if(mainPhoto.mainPhoto === undefined || tilePhotos.length < 10 || projectTitle === "") {
+            alert("There are some problems with your project. Check that you have a main photo, at least 10 tile photos, and a project name.");
+            setProcessedProject(false);
+            return;
+        }
+
+        console.log("made it this far");
+        const reqBody = {};
+        reqBody.mainPhoto = mainPhoto.mainPhoto;
+        reqBody.tilePhotos = tilePhotos;
+        reqBody.projectTitle = projectTitle;
+
+        axios.post(`/api/project`, reqBody)
+            .then(() => {
+                setProcessedProject(true);
+            })
+            .catch((err) => {
+                setProcessedProject(false);
+                console.log(err);
+            });
+    }, [mainPhoto, tilePhotos, projectTitle, currStage]);
 
 
+    //this helps make sure that mainPhotos cannot become tile photos as well. Could probably use refactoring. 
+    //Was not updated after setting requirements for moving between stages.
     const [imageSourcesForTiles, setImageSourcesForTiles] = useState(imageSources);
     const [imageIdsForTiles, setImageIdsForTiles] = useState(imageIds);
     useEffect(() => {
@@ -75,6 +123,17 @@ const NewProjectPage = ({ userId }) => {
         }
     }, [mainPhoto.mainPhoto]);
 
+    //useEffect to reset the stages if that button is selected
+    useEffect(() => {
+        if(currStage !== 4) {
+            return;
+        }
+
+        if (startNewProject) {
+            setCurrStage(1);
+        }
+    }, [startNewProject]);
+
     
     return (
         <div className="main-content-container flex flex-col justify-center items-center">
@@ -85,13 +144,15 @@ const NewProjectPage = ({ userId }) => {
                     : "Step 3: Add Project Info"}
                 </h2>
 
-                <ProgressBar currStage={currStage} />
+                <ProgressBar currStage={currStage} processedProject={processedProject} />
 
                 { currStage === 1 ?
                     <PhotoContainerMainSelect imageSources={imageSources} setMainPhoto={setMainPhoto} imageIds={imageIds}/>
                   : currStage === 2 ? 
                     <PhotoContainerTileSelect imageSources={imageSourcesForTiles} imageIds={imageIdsForTiles} setTilePhotos={setTilePhotos} />
-                  : <MetaDataForm />
+                  : currStage === 3 ? 
+                    <MetaDataForm numTiles={tilePhotos.length} setProjectTitle={setProjectTitle} />
+                  : <ProcessedProjectInfo processApproved={processedProject} setStartNewProject={setStartNewProject} />
                 }
 
                 <div className="stage-change-container">
@@ -99,7 +160,7 @@ const NewProjectPage = ({ userId }) => {
                         <PreviousButton className="text-white" size="30"/>
                     </div>
 
-                    <div className={`stage-change-button ${currStage >= 3 ? "disabled" : "" }`} onClick={handleNextStage}>
+                    <div className={`stage-change-button ${currStage > 3 ? "disabled" : "" }`} onClick={handleNextStage}>
                         <NextButton className="text-white" size="30"/>
                     </div>
                 </div>
@@ -130,12 +191,15 @@ const PhotoContainerMainSelect = ({ imageSources, setMainPhoto, imageIds }) => {
     return (
         <div className="all-photos-container">
             {(imageSources.map((image, index) => {
-                return (<MainProjectPhoto 
+                return (
+                    <MainProjectPhoto 
                         image={image} 
                         selected={photoSelectionArray[index]} 
                         indexNum={index} 
-                        setCurrSelection={setCurrSelection} 
-                        />);
+                        setCurrSelection={setCurrSelection}
+                        key={image}
+                    />
+                );
             }))}
         </div>
     )
@@ -191,6 +255,7 @@ const PhotoContainerTileSelect = ({ imageSources, imageIds, setTilePhotos }) => 
                         indexNum={index} 
                         setPhotoSelectionArray={setPhotoSelectionArray}
                         photoSelectionArray={photoSelectionArray} 
+                        key={image}
                         />);
             }))}
         </div>
@@ -222,30 +287,85 @@ const TileProjectPhoto = ({selected, image, indexNum, setPhotoSelectionArray, ph
     )
 }
 
-const ProgressBar = ({ currStage }) => {
+const ProgressBar = ({ currStage, processedProject }) => {
 
     return (
         <div className="progress-bar-background">
-            <div className={`progress-in-green ${currStage === 1 ? "w-[100px]" : currStage === 2 ? "w-[350px]" : "w-[600px]" }`} />
-            <StageNumber number={1} currStage={currStage} />
-            <StageNumber number={2} currStage={currStage} />
-            <StageNumber number={3} currStage={currStage} />
+            <div className={`progress-bar 
+                ${currStage === 1 ? "w-[100px]" : 
+                currStage === 2 ? "w-[350px]" : 
+                currStage === 3 ? "w-[600px]" :
+                "w-[100%]" }
+
+                ${currStage === 4 && !processedProject ? "bg-red-500" : "bg-green-500"}
+                
+                `} 
+            />
+            <StageNumber number={1} currStage={currStage} processedProject={processedProject} />
+            <StageNumber number={2} currStage={currStage} processedProject={processedProject} />
+            <StageNumber number={3} currStage={currStage} processedProject={processedProject} />
         </div>
     );
 }
 
-const StageNumber = ({ number, currStage }) => {
+const StageNumber = ({ number, currStage, processedProject }) => {
 
     return (
         <div className="stage-number-container">
-            <Circle size="50" className={`stage-number-circle ${currStage < number ? "text-gray-400" : "text-green-500"}`}/>
+            <Circle size="50" 
+                className={`stage-number-circle 
+                    ${currStage < number ? "text-gray-400" : 
+                    currStage === 4 && !processedProject ? "text-red-500" : 
+                    "text-green-500"}`
+                }
+            />
             <h4 className="stage-number">{number}</h4>
         </div>
     )
 }
 
-const MetaDataForm = () => {
+const MetaDataForm = ({ numTiles, setProjectTitle }) => {
+    
+    const handleChange = (e) => {
+        e.preventDefault();
+        const input = document.getElementById("project-name");
+        setProjectTitle(input.value);
+    }
 
+    return (
+        <div className="project-form-container">
+            <form onSubmit={(e) => e.preventDefault()}>
+                <label htmlFor="project-name">Project Name:</label>
+                <input type="text" required id="project-name" onChange={handleChange} />
+            </form>
+            <h2 className="num-tiles-header">Number of photos to use as tiles: {numTiles}</h2>
+        </div>
+    )
+}
+
+const ProcessedProjectInfo = ({ processApproved, setStartNewProject }) => {
+
+    const [displayMessage, setDisplayedMessage] = useState("");
+    useEffect(() => {
+        setStartNewProject(false);
+        if(processApproved) {
+            setDisplayedMessage("Your project was submitted Successfully!");
+        } else {
+            setDisplayedMessage("An error occurred while processing your project. Please try again later.");
+        }
+    }, [processApproved]);
+
+    const handleClick = e => {
+        e.preventDefault();
+        setStartNewProject(true);
+    }
+
+    return (
+        <div className="project-submission-info">
+            <h2>{displayMessage}</h2>
+            {processApproved ? <button className="start-new-project-button" onClick={handleClick}>Start a new project</button> : ""}
+        </div>
+    );
 }
 
 export default NewProjectPage;
