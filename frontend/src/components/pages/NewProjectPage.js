@@ -1,15 +1,13 @@
 import axios from "axios";
-import { useEffect, useRef, useState } from "react";
-import { AiOutlineConsoleSql } from "react-icons/ai";
+import { useEffect, useState } from "react";
 import { BsCheckCircleFill as SelectedIcon, BsFillCircleFill as Circle } from 'react-icons/bs';
 import { HiOutlineArrowNarrowLeft as PreviousButton, HiOutlineArrowNarrowRight as NextButton } from 'react-icons/hi';
-import { RiContactsBookLine } from "react-icons/ri";
 
 
 const NewProjectPage = ({ userId }) => {
 
+    //page state
     const [imageIds, setImageIds] = useState([]);
-    const [imageEndpoints, setImageEndpoints] = useState([]);
     const [imageSources, setImageSources] = useState([]);
     const [currStage, setCurrStage] = useState(1);
     const [mainPhoto, setMainPhoto] = useState({});
@@ -18,6 +16,7 @@ const NewProjectPage = ({ userId }) => {
     const [processedProject, setProcessedProject] = useState(false);
     const [startNewProject, setStartNewProject] = useState(false);
 
+    //method to increment through steps of creating a project
     const handleNextStage = e => {
         if (currStage === 1) {
             if(mainPhoto.mainPhoto === undefined) {
@@ -43,6 +42,7 @@ const NewProjectPage = ({ userId }) => {
         }
     }
 
+    //method to revert to previous step in creating a project
     const handlePrevStage = e => {
         if(currStage > 1) {
             setCurrStage(currStage - 1);
@@ -60,7 +60,6 @@ const NewProjectPage = ({ userId }) => {
                 tempArrForImageIds.forEach(id => {
                     tempArrForEndpoints.push(`/api/photos/${id}`);
                 });
-                setImageEndpoints(tempArrForEndpoints);
                 
                 axios.all(tempArrForEndpoints.map((endpoint) => axios.get(endpoint, { responseType: 'blob' })))
                     .then(axios.spread((...responses) => {
@@ -77,7 +76,8 @@ const NewProjectPage = ({ userId }) => {
             .catch(err => console.log(err));
     }, []);
 
-    //this will become the effect that maintains the request body
+    //this effect tracks the overall status of the post request body.
+    //if the reqBody is valid and the page is in the correct stage, it submits it to the backend through axios.
     useEffect(() => {
         if(currStage !== 4) {
             return;
