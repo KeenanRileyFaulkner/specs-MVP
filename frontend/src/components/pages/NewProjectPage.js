@@ -88,7 +88,6 @@ const NewProjectPage = ({ userId }) => {
             return;
         }
 
-        console.log("made it this far");
         const reqBody = {};
         reqBody.mainPhoto = mainPhoto.mainPhoto;
         reqBody.tilePhotos = tilePhotos;
