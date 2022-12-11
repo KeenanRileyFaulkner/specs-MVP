@@ -93,6 +93,7 @@ const NewProjectPage = ({ userId }) => {
         reqBody.mainPhoto = mainPhoto.mainPhoto;
         reqBody.tilePhotos = tilePhotos;
         reqBody.projectTitle = projectTitle;
+        reqBody.userId = userId;
 
         axios.post(`/api/project`, reqBody)
             .then(() => {
