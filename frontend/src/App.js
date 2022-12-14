@@ -1,9 +1,10 @@
 import './App.css';
 import { useState } from 'react';
 import Header from './components/Header';
-import Photos from './components/pages/Photos';
+import PhotosPage from './components/pages/PhotosPage';
 import UserAuthentication from './components/pages/UserAuthentication';
 import NewProjectPage from './components/pages/NewProjectPage';
+import ViewMosaicPage from './components/pages/ViewMosaicPage';
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(false);
@@ -12,10 +13,11 @@ function App() {
   let toDisplay;
   if(loggedIn) {
     toDisplay = 
-    <NewProjectPage userId={userId} />; 
-    // <Photos userId={userId}/>;
+    // <NewProjectPage userId={userId} />; 
+    // <PhotosPage userId={userId} />;
+    <ViewMosaicPage userId={userId} />;
   } else {
-    toDisplay = <UserAuthentication setLoggedIn={setLoggedIn} setUserId={setUserId}/>;
+    toDisplay = <UserAuthentication setLoggedIn={setLoggedIn} setUserId={setUserId}/>; 
   }
 
   return (

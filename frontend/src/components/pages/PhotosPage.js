@@ -3,7 +3,7 @@ import { useState, useEffect, useRef } from 'react'
 import { AiOutlinePlus as PlusIcon, AiOutlineClose as CloseIcon } from 'react-icons/ai'
 import { BsFillArrowLeftCircleFill as LeftArrowCircle, BsFillArrowRightCircleFill as RightArrowCircle } from 'react-icons/bs';
 
-const Photos = ({userId}) => {
+const PhotosPage = ({userId}) => {
     const incrIndex = e => {
         e.preventDefault();
         if(currentImageIndex < imageSources.length - 1) {
@@ -306,4 +306,4 @@ const AddPhotoButton = ({ userId, setAllPhotoIds, allPhotoIds, setImageEndpoints
 
 
 
-export default Photos;
+export default PhotosPage;
