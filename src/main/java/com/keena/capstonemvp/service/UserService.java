@@ -37,4 +37,9 @@ public class UserService {
         user.getPhotos().add(photo);
         return photoRepository.saveAndFlush(photo).getId();
     }
+
+    public Collection<Long> getUserProjects(Long userId) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        return user.getProjects().stream().map(project -> project.getId()).collect(Collectors.toList());
+    }
 }

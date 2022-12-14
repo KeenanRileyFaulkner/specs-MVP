@@ -27,6 +27,11 @@ public class Project {
     @Column(name = "tiling_photos")
     private Collection<Photo> tilingPhotos;
 
+    public void addTilePhoto(Photo photo) {
+        this.getTilingPhotos().add(photo);
+        photo.getProjectsAsTile().add(this);
+    }
+
     @PreRemove
     private void removeProjectsFromPhotos() {
         for(Photo p : tilingPhotos) {

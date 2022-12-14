@@ -26,4 +26,10 @@ public class UserController {
                   @PathVariable("userId") Long userId) throws Exception {
         return userService.addPhoto(mainPhoto, userId);
     }
+
+    //mapping to get all projects of a user
+    @GetMapping(value = "/api/user/{userId}/projects")
+    Collection<Long> getAllProjects(@PathVariable Long userId) throws Exception {
+        return userService.getUserProjects(userId);
+    }
 }
